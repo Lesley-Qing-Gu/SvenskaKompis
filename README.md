@@ -1,35 +1,50 @@
-# 🇸🇪 SvenskaKompis: Your Personal Swedish Language Coach
+# 🇸🇪 SvenskaKompis: 你的 AI 瑞典语私教
 
-**SvenskaKompis** (Swedish for "Swedish Friend") is a high-end, AI-powered language learning platform designed to bridge the gap between classroom Swedish and the authentic, nuanced Swedish spoken in everyday life. 
-
-Powered by the latest **Google Gemini 3** models, the app generates custom, culturally rich learning materials tailored to your specific life scenarios.
-
-## ✨ Key Features
-
--   **🎯 Dynamic Scenario Generation**: Forget static textbooks. Whether you're preparing for a job interview at a tech startup in Stockholm or trying to navigate the "tvättstuga" (laundry room) drama, SvenskaKompis generates relevant dialogues on demand.
--   **🔊 Interactive Audio Playback**: Every sentence, vocabulary word, and pronunciation tip can be played back using high-fidelity **Gemini TTS**, allowing you to master the unique "melody" of the Swedish language.
--   **🌍 Cultural Intelligence (Kultur Tips)**: Language is inseparable from culture. The app provides hyper-local insights into Swedish social norms, office etiquette, and the unwritten rules of Swedish society.
--   **⚡ Level-Specific Content**: 
-    -   **SFI C/D**: Clear, grammatically foundational language.
-    -   **Professional**: Modern corporate Swedish for the workplace.
-    -   **Slang/Casual**: Authentic street Swedish, including high-frequency filler words like *liksom* and *ju*.
--   **🖨️ Print-Ready Lessons**: Generate a lesson, practice the audio, and print a beautifully formatted "cheat sheet" to take with you.
-
-## 🛠️ Technical Foundation
-
--   **Frontend**: Built with **React 19** and **Tailwind CSS** for a fast, responsive, and accessible user experience.
--   **AI Engine**: 
-    -   **Gemini 3 Pro/Flash**: Used for intelligent content generation, structured JSON output, and linguistic reasoning.
-    -   **Gemini 2.5 Flash (Native Audio)**: Provides low-latency, natural-sounding Swedish text-to-speech.
--   **Design Philosophy**: A "Nordic Noir" meets "Digital Minimalist" aesthetic, utilizing a color palette inspired by the Swedish flag and the serene landscapes of Scandinavia.
-
-## 🚀 How to Use
-
-1.  **Define Your Scenario**: Enter where you are (e.g., "At the pharmacy" or "Discussing a project at IKEA").
-2.  **Set Your Keywords**: Input specific words you want to practice (e.g., *recept*, *fika*, *lagom*).
-3.  **Choose Your Level**: Match the complexity to your current skill level.
-4.  **Practice & Listen**: Read the dialogue, check the translations, and click the play icons to hear the native pronunciation.
+**SvenskaKompis** (瑞典语意为“瑞典伙伴”) 是一款融合了前沿 AI 技术的瑞典语深度学习工具。它不仅仅是一个翻译器，更是一个懂文化、会倾听、能纠音的私人教练，旨在帮助学习者跨越从“课本瑞典语”到“地道生活瑞典语”的鸿沟。
 
 ---
 
-*Lycka till med din svenska! (Good luck with your Swedish!)*
+## ✨ 核心功能
+
+### 1. 🎯 智能情景对话 (Scenario Builder)
+告别枯燥的固定教材。无论是去 IKEA 选购家具，还是在 Stockholm 的初创公司面试，或是处理瑞典臭名昭著的“洗衣房纠纷 (Tvättstuga drama)”，只需输入关键词，AI 即可为你生成定制化对话。
+- **地道口语**：包含 *liksom*, *ju*, *alltså* 等高频语气助词，让你听起来更像本地人。
+- **文化导航**：提供关于瑞典社交礼仪、办公室文化和不成人文规定的深度解析。
+- **实时发音**：由 **Gemini 2.5 Flash TTS** 驱动的高保真语音播放，带你掌握瑞典语特有的“音乐旋律感”。
+
+### 2. 🧪 语音实验室 (Speech Lab) —— **新功能!**
+通过 **Gemini 3 Flash** 的多模态能力，AI 现在可以“听”你的发音并给出专业评测。
+- **随机话题挑战**：每次进入都会自动生成一个瑞典文化相关的话题（如：讨论 Lagom、仲夏节挑战等）。
+- **多维度评分**：从“语法准确度”和“发音韵律”两个维度进行 0-100 打分。
+- **专家级分析**：AI 会指出你发音中的重音、长短元音问题，并给出具体的改进方案。
+
+### 3. 📈 阶梯式难度
+- **SFI C/D (基础)**：清晰、严谨的语法基础，适合初学者。
+- **Professional (职场)**：现代企业级瑞典语，侧重商务沟通。
+- **Slang/Casual (地道)**：最前沿的街头瑞典语和生活化表达。
+
+---
+
+## 🛠️ 技术基石
+
+- **前端架构**：基于 **React 19** 和 **Tailwind CSS**，采用北欧简约主义设计风格 (Nordic Minimalism)。
+- **核心大脑**：
+    - **Gemini 3 Pro/Flash**：负责逻辑推理、情景生成和复杂的 JSON 结构化数据处理。
+    - **Gemini 3 Flash (Multimodal)**：负责对用户上传的音频文件进行端到端的深度语义理解与评估。
+    - **Gemini 2.5 Flash TTS**：提供自然流畅的瑞典语语音合成。
+- **多模态交互**：集成浏览器 **MediaRecorder API**，实现流畅的音频采集与 AI 处理流。
+
+---
+
+## 🚀 开启学习之旅
+
+1. **选择模式**：
+   - 使用 **情景对话** 来积累词汇和语感。
+   - 使用 **语音实验室** 来磨练你的发音。
+2. **定制练习**：输入你感兴趣的场景或点击“换一个”获取随机挑战话题。
+3. **互动反馈**：点击播放图标聆听 AI 发音，或长按麦克风进行口语练习。
+4. **文化进阶**：仔细阅读每一条“文化贴士”，这些往往是融入瑞典社会的钥匙。
+
+---
+
+*Lycka till med din svenska! (祝你的瑞典语学习一帆风顺！)* 🇸🇪

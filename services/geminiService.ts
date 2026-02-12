@@ -1,6 +1,6 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { CoachRequest, SwedishCoachResponse } from "../types";
+import { CoachRequest, SwedishCoachResponse, SpeechEvaluationResponse } from "../types";
 
 const SYSTEM_INSTRUCTION = `
 You are a world-class Swedish language coach and cultural expert (SvenskaKompis). 
@@ -10,29 +10,30 @@ RULES:
 1. Always include filler words like 'liksom', 'ju', 'väl', 'precis', 'alltså', 'faktiskt'.
 2. Tone: Friendly, encouraging, professional with a touch of Swedish humor ('lagom' jokes).
 3. Output MUST be in valid JSON format matching the provided schema.
-4. For 'SFI C/D', use clear grammar and common words.
-5. For 'Professional', use formal yet modern corporate Swedish.
-6. For 'Slang/Casual', use high-frequency street slang and contractions (e.g., 'ska' instead of 'skall', 'dom' instead of 'de/dem').
-7. Cultural tip must be hyper-specific to Sweden (e.g., Fika etiquette, Systembolaget hours, laundry room drama 'tvättstuga').
+`;
 
-JSON Schema:
-{
-  "vocabulary": [{"term": "string", "translation": "string", "info": "string"}],
-  "dialogue": [{"role": "Role A", "swedish": "string", "chinese": "string"}],
-  "culturalTip": "string",
-  "pronunciation": [{"term": "string", "explanation": "string"}]
-}
+const EVALUATION_SYSTEM_INSTRUCTION = `
+You are a strict but encouraging Swedish phonetics and linguistics expert. 
+Your task is to evaluate a user's spoken Swedish audio based on a specific topic.
+
+EVALUATION CRITERIA:
+1. Transcript: Transcribe exactly what the user said in Swedish.
+2. Content Score: 0-100 based on grammar, vocabulary, and relevance to the topic.
+3. Pronunciation Score: 0-100 based on pitch accent (grav/akut), vowel length, and flow.
+4. Strengths: List 2-3 specific things the user did well.
+5. Improvements: List 2-3 specific areas for correction.
+6. Grammar/Pronunciation Notes: Detailed pedagogical explanation.
+
+Output MUST be in valid JSON.
 `;
 
 export async function generateSwedishLesson(request: CoachRequest): Promise<SwedishCoachResponse> {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
-  
   const prompt = `
     Scenario: ${request.scenario}
     Level: ${request.level}
     Keywords to include: ${request.keywords}
-    
-    Generate a 5-8 round dialogue. Ensure the keywords are used naturally.
+    Generate a 5-8 round dialogue with vocab and cultural tips.
   `;
 
   try {
@@ -87,9 +88,7 @@ export async function generateSwedishLesson(request: CoachRequest): Promise<Swed
       }
     });
 
-    const text = response.text;
-    if (!text) throw new Error("No response from AI");
-    return JSON.parse(text) as SwedishCoachResponse;
+    return JSON.parse(response.text) as SwedishCoachResponse;
   } catch (error) {
     console.error("Gemini API Error:", error);
     throw error;
@@ -111,14 +110,58 @@ export async function generateSpeech(text: string): Promise<string | undefined> 
         },
       },
     });
-
-    const base64Audio = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
-    if (!base64Audio) {
-      console.warn("TTS API returned no audio data. Check safety filters or API limits.");
-    }
-    return base64Audio;
+    return response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
   } catch (error) {
-    console.error("TTS Generation Error:", error);
+    console.error("TTS Error:", error);
     return undefined;
+  }
+}
+
+export async function evaluateSpeech(audioBase64: string, topic: string): Promise<SpeechEvaluationResponse> {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
+  
+  const prompt = `Topic: ${topic}. Please evaluate my spoken Swedish in the attached audio clip.`;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview", // Using a stable model for multimodal evaluation
+      contents: [
+        {
+          parts: [
+            { text: prompt },
+            {
+              inlineData: {
+                mimeType: "audio/webm",
+                data: audioBase64
+              }
+            }
+          ]
+        }
+      ],
+      config: {
+        systemInstruction: EVALUATION_SYSTEM_INSTRUCTION,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            transcript: { type: Type.STRING },
+            contentScore: { type: Type.NUMBER },
+            pronunciationScore: { type: Type.NUMBER },
+            strengths: { type: Type.ARRAY, items: { type: Type.STRING } },
+            improvements: { type: Type.ARRAY, items: { type: Type.STRING } },
+            grammarNotes: { type: Type.STRING },
+            pronunciationNotes: { type: Type.STRING }
+          },
+          required: ["transcript", "contentScore", "pronunciationScore", "strengths", "improvements", "grammarNotes", "pronunciationNotes"]
+        }
+      }
+    });
+
+    const text = response.text;
+    if (!text) throw new Error("Empty response from evaluation engine");
+    return JSON.parse(text) as SpeechEvaluationResponse;
+  } catch (error) {
+    console.error("Evaluation API Error:", error);
+    throw error;
   }
 }

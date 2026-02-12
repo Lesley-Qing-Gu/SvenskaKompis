@@ -34,3 +34,13 @@ export interface CoachRequest {
   level: Level;
   keywords: string;
 }
+
+export interface SpeechEvaluationResponse {
+  transcript: string;
+  contentScore: number;
+  pronunciationScore: number;
+  strengths: string[];
+  improvements: string[];
+  grammarNotes: string;
+  pronunciationNotes: string;
+}
